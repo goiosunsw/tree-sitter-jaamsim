@@ -1,0 +1,11 @@
+======================
+Include Statements
+======================
+
+include incfile.inc
+
+---
+
+(program
+	(include_stat
+		(path)))

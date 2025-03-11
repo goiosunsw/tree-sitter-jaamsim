@@ -1,0 +1,13 @@
+======================
+Define Statements
+======================
+
+Define Material { Ore Pellet }
+
+---
+
+(program
+	(define_stat
+		(obj_type)
+		(object)
+		(object)))

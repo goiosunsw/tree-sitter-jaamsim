@@ -1,0 +1,85 @@
+================================
+Simple attribute value statement
+================================
+
+SomeObject SomeProperty { AnotherObject }
+
+---
+
+(program
+	(sentence
+		(object)
+		(property)
+		(value
+			(object))))
+			
+================================
+Simple attribute multiple value statement
+================================
+
+SomeObject SomeProperty { AnotherObject YetAnotherObject }
+
+---
+
+(program
+	(sentence
+		(object)
+		(property)
+		(value
+			(object))
+		(value
+			(object))))
+			
+================================
+Simple attribute unitful list statement
+================================
+
+SomeObject SomeProperty { 1.0 2.0 m/s }
+
+---
+
+(program
+	(sentence
+		(object)
+		(property)
+		(value
+			(number))
+		(value
+			(number))
+		(unit))))
+			
+================================
+Multiple attribute value statement
+================================
+
+SomeObject SomeProperty { AnotherObject } AnotherProperty { YetAnotherObject }
+
+---
+
+(program
+	(sentence
+		(object)
+		(property)
+		(value
+			(object))
+		(property)
+		(value
+			(object))))
+			
+================================
+Multiple attribute number value statement
+================================
+
+SomeObject SomeProperty { 1.0 } AnotherProperty { TRUE }
+
+---
+
+(program
+	(sentence
+		(object)
+		(property)
+		(value
+			(number))
+		(property)
+		(value
+			(bool))))
