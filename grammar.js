@@ -6,6 +6,8 @@ module.exports = grammar({
   rules: {
     program: $ => repeat(choice(
       $.rec_decl,
+      $.include_stat,
+      $.define_stat,
       $.comment,
       $.sentence
     )),
@@ -13,26 +15,30 @@ module.exports = grammar({
     comment: $ => token(seq('#', /.*/)),
     junk: $ => /[^%@\s\n\t][^%@]*/,
     rec_decl: $ => "RecordEdits",
+    include_stat: $ => seq("include", $.path),
+    define_stat: $ => seq("Define", $.obj_type, $._obj_list),
+
+    obj_type: $ => /[A-Z][A-Za-z]*/,
+    _obj_list: $ => seq("{", repeat1($.object), "}"),
 
     sentence: $ => seq(
       $._subj, 
-      $.property, 
-      $._val_sent),
+      repeat1($._prop_val),"\n"),
+    _prop_val: $ => seq($.property, $._val_sent),
 
-    _subj: $ => choice($.define, $.object, $._obj_prop),
-    define: $ => "Define",
+    _subj: $ => choice( $.object, $._obj_prop),
 
-    object: $ => /[A-Za-z_][A-Za-z0-9_-]*/,
+    object: $ => /[A-Za-z_][A-Za-z0-9_()-]*/,
     _obj_prop: $ => seq($.object, ".", $.property),
     this: $ => "this",
-    property: $ => /[A-Za-z_][A-Za-z0-9_]*/,
+    property: $ => /[A-Za-z_][A-Za-z0-9_()]*/,
     _val_sent: $ => choice($._empty_val, $._val_exp),
     _val_exp: $ => choice(
-      prec(5,seq("{", repeat1($.value), "}")),
-      prec(1,$._dim_list)
+      $._dim_list,
+      seq("{", repeat1($.value), "}"),
     ),
 
-    _dim_list: $ => seq("{", repeat1($.number), $.unit, "}"),
+    _dim_list: $ => prec(7,seq("{", repeat1($.number), $.unit, "}")),
 
     _empty_val: $ => seq("{", "}"),
     
@@ -46,7 +52,7 @@ module.exports = grammar({
       $.expr,
       $.path,
     )),
-    number: $ => /[0-9.-]+/,
+    number: $ => /-?[0-9]+\.?[0-9]*/,
     bool: $ => choice("TRUE", "FALSE"),
     string: $ => /\'[^']*\'/,
 
@@ -60,7 +66,9 @@ module.exports = grammar({
       prec(5,seq("{", repeat($.value), "}"))
     ),
 
-    unit : $ => /\[?[A-Za-z]+\]?/,
+    unit : $ => choice(
+      /\[?[A-Za-z]+\]?/,
+      /\[?[A-Za-z]+\/[A-Za-z]+\]?/),
     path: $ => /[A-Za-z0-9._/<>-]+/,
     empty: $ => /[ \t]*/
   }
