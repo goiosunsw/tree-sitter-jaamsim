@@ -4,7 +4,6 @@
 (string) @string
 (comment) @comment
 (rec_decl) @keyword
-(define) @keyword
 (this) @keyword
 (bool) @constant
 
